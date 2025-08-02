@@ -90,6 +90,7 @@ class Autoloader {
 						case 'blocks':
 						case 'commands':
 						case 'endpoints':
+						case 'feeds':
 						case 'settings':
 						case 'traits':
 							array_pop( $structure );

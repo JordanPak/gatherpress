@@ -24,12 +24,10 @@ defined( 'ABSPATH' ) || exit; // @codeCoverageIgnore
 trait Singleton {
 
 	/**
-	 * The single instance of the class.
-	 *
-	 * @since 1.0.0
-	 * @var self|null The instance of the class or null if not instantiated.
+	 * The instance
 	 */
-	private static ?self $instance = null;
+	// phpcs:ignore Squiz.Commenting.VariableComment.MissingVar, Squiz.Commenting.VariableComment.Missing
+	protected static $instance = array();
 
 	/**
 	 * Get the instance of the Singleton class.
@@ -40,11 +38,16 @@ trait Singleton {
 	 *
 	 * @return self The instance of the class.
 	 */
-	public static function get_instance(): self {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
+	final public static function get_instance() {
+
+		// Allow for compatibility with sub-classes (those extending something
+		// that uses this trait).
+		$called_class = get_called_class();
+
+		if ( ! isset( static::$instance[ $called_class ] ) ) {
+			static::$instance[ $called_class ] = new $called_class();
 		}
 
-		return self::$instance;
+		return static::$instance[ $called_class ];
 	}
 }
